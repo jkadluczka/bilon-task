@@ -14,7 +14,7 @@ const CurrencyDisplay = () => {
   const [rate, setRate] = useState(0);
 
   const handleChangeAmount = (event) => {
-    setAmount(event.target.value);
+    event.target.value >= 0 && setAmount(event.target.value);
   };
 
   const handleChangeFrom = (event, value) => {
@@ -38,13 +38,13 @@ const CurrencyDisplay = () => {
     const toSymbol = currencyOptions.find((element) => element.name === to)
       .symbol;
 
-    const rates = await getRates(fromSymbol, toSymbol);
+    const result = await getRates(fromSymbol, toSymbol);
 
-    console.log(rates.rates[fromSymbol]);
-
-    rates.sucess && setRate(rates.rates[fromSymbol] / rates.rates[toSymbol]);
-    console.log(rates);
+    result.success &&
+      setRate(result.rates[toSymbol] / result.rates[fromSymbol]);
   };
+
+  const getCalculatedAmount = () => Math.round(amount * rate * 100) / 100;
 
   return (
     <div>
@@ -87,6 +87,9 @@ const CurrencyDisplay = () => {
           />
           <Button onClick={handleCalculateRates}>calculate</Button>
         </div>
+        {rate !== 0 && (
+          <div>{`${amount} ${from} = ${getCalculatedAmount()} ${to}`}</div>
+        )}
       </Container>
     </div>
   );

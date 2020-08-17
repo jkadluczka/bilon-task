@@ -7,6 +7,7 @@ import { currencyOptions } from './../../constants/currencyConstants';
 import { getRates } from './../../actions/currencyActions';
 import useStyles from './currencyDisplay.style';
 import SyncIcon from '@material-ui/icons/Sync';
+import format from 'date-fns/format';
 
 const CurrencyDisplay = () => {
   const [amount, setAmount] = useState(0);
@@ -46,14 +47,10 @@ const CurrencyDisplay = () => {
 
   const getCalculatedAmount = (amount) => Math.round(amount * rate * 100) / 100;
 
-  const getToday = () => {
-    const now = new Date();
-
-    return `${now.getDate()}-${now.getUTCMonth()}-${now.getFullYear()}`;
-  };
+  const getToday = () => format(new Date(), 'dd MMMM yyyy');
 
   return (
-    <div>
+    <div className={classes.root}>
       <Typography
         component="h1"
         variant="h2"

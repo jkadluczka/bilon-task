@@ -9,8 +9,8 @@ import { getRates } from './../../actions/currencyActions';
 
 const CurrencyDisplay = () => {
   const [amount, setAmount] = useState(0);
-  const [from, setFrom] = useState('');
-  const [to, setTo] = useState('');
+  const [from, setFrom] = useState({});
+  const [to, setTo] = useState({});
   const [rate, setRate] = useState(0);
 
   const handleChangeAmount = (event) => {
@@ -18,11 +18,11 @@ const CurrencyDisplay = () => {
   };
 
   const handleChangeFrom = (event, value) => {
-    setFrom(value.name);
+    setFrom(value);
   };
 
   const handleChangeTo = (event, value) => {
-    setTo(value.name);
+    setTo(value);
   };
 
   const handleSwap = () => {
@@ -32,16 +32,10 @@ const CurrencyDisplay = () => {
   };
 
   const handleCalculateRates = async () => {
-    const fromSymbol = currencyOptions.find((element) => element.name === from)
-      .symbol;
-
-    const toSymbol = currencyOptions.find((element) => element.name === to)
-      .symbol;
-
-    const result = await getRates(fromSymbol, toSymbol);
+    const result = await getRates(from.symbol, to.symbol);
 
     result.success &&
-      setRate(result.rates[toSymbol] / result.rates[fromSymbol]);
+      setRate(result.rates[to.symbol] / result.rates[from.symbol]);
   };
 
   const getCalculatedAmount = (amount) => Math.round(amount * rate * 100) / 100;
@@ -75,7 +69,7 @@ const CurrencyDisplay = () => {
           <Autocomplete
             options={currencyOptions}
             getOptionLabel={(option) => option.name}
-            inputValue={from}
+            inputValue={from.name}
             onChange={handleChangeFrom}
             renderInput={(params) => (
               <TextField {...params} label="From" variant="outlined" />
@@ -85,7 +79,7 @@ const CurrencyDisplay = () => {
           <Autocomplete
             options={currencyOptions}
             getOptionLabel={(option) => option.name}
-            inputValue={to}
+            inputValue={to.name}
             onChange={handleChangeTo}
             renderInput={(params) => (
               <TextField {...params} label="To" variant="outlined" />
@@ -95,13 +89,13 @@ const CurrencyDisplay = () => {
         </div>
         {rate !== 0 && (
           <div>
-            <div>{`${amount} ${from} = ${getCalculatedAmount(
-              amount
-            )} ${to}`}</div>
+            <div>{`${amount} ${from.name} = ${getCalculatedAmount(amount)} ${
+              to.name
+            }`}</div>
             <div>
-              {`1 ${from} is worth ${getCalculatedAmount(
-                1
-              )} ${to} on ${getToday()} `}
+              {`1 ${from.symbol} = ${getCalculatedAmount(1)} ${
+                to.symbol
+              } on ${getToday()} `}
             </div>
           </div>
         )}

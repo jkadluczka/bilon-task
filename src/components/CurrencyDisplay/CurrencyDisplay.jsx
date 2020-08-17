@@ -21,12 +21,12 @@ const CurrencyDisplay = () => {
     event.target.value >= 0 && setAmount(event.target.value);
   };
 
-  const handleChangeFrom = (event, value) => {
-    setFrom(value);
+  const handleChangeFrom = (event, value, reason) => {
+    reason === 'clear' ? setFrom({ name: '' }) : setFrom(value);
   };
 
-  const handleChangeTo = (event, value) => {
-    setTo(value);
+  const handleChangeTo = (event, value, reason) => {
+    reason === 'clear' ? setTo({ name: '' }) : setTo(value);
   };
 
   const handleSwap = () => {

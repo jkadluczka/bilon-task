@@ -5,11 +5,13 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { currencyOptions } from './../../constants/currencyConstants';
+import { getRates } from './../../actions/currencyActions';
 
 const CurrencyDisplay = () => {
   const [amount, setAmount] = useState(0);
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
+  const [rate, setRate] = useState(0);
 
   const handleChangeAmount = (event) => {
     setAmount(event.target.value);
@@ -21,6 +23,27 @@ const CurrencyDisplay = () => {
 
   const handleChangeTo = (event, value) => {
     setTo(value.name);
+  };
+
+  const handleSwap = () => {
+    let tempValue = from;
+    setFrom(to);
+    setTo(tempValue);
+  };
+
+  const handleCalculateRates = async () => {
+    const fromSymbol = currencyOptions.find((element) => element.name === from)
+      .symbol;
+
+    const toSymbol = currencyOptions.find((element) => element.name === to)
+      .symbol;
+
+    const rates = await getRates(fromSymbol, toSymbol);
+
+    console.log(rates.rates[fromSymbol]);
+
+    rates.sucess && setRate(rates.rates[fromSymbol] / rates.rates[toSymbol]);
+    console.log(rates);
   };
 
   return (
@@ -52,6 +75,7 @@ const CurrencyDisplay = () => {
               <TextField {...params} label="From" variant="outlined" />
             )}
           />
+          <Button onClick={handleSwap}>Swap</Button>
           <Autocomplete
             options={currencyOptions}
             getOptionLabel={(option) => option.name}
@@ -61,6 +85,7 @@ const CurrencyDisplay = () => {
               <TextField {...params} label="To" variant="outlined" />
             )}
           />
+          <Button onClick={handleCalculateRates}>calculate</Button>
         </div>
       </Container>
     </div>

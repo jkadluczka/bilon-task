@@ -44,7 +44,13 @@ const CurrencyDisplay = () => {
       setRate(result.rates[toSymbol] / result.rates[fromSymbol]);
   };
 
-  const getCalculatedAmount = () => Math.round(amount * rate * 100) / 100;
+  const getCalculatedAmount = (amount) => Math.round(amount * rate * 100) / 100;
+
+  const getToday = () => {
+    const now = new Date();
+
+    return `${now.getDate()}-${now.getUTCMonth()}-${now.getFullYear()}`;
+  };
 
   return (
     <div>
@@ -88,7 +94,16 @@ const CurrencyDisplay = () => {
           <Button onClick={handleCalculateRates}>calculate</Button>
         </div>
         {rate !== 0 && (
-          <div>{`${amount} ${from} = ${getCalculatedAmount()} ${to}`}</div>
+          <div>
+            <div>{`${amount} ${from} = ${getCalculatedAmount(
+              amount
+            )} ${to}`}</div>
+            <div>
+              {`1 ${from} is worth ${getCalculatedAmount(
+                1
+              )} ${to} on ${getToday()} `}
+            </div>
+          </div>
         )}
       </Container>
     </div>

@@ -1,11 +1,11 @@
 import React from 'react';
 import './App.css';
-import CurrencyDisplay from './components/CurrencyDisplay/CurrencyDisplay';
+import CurrencyContainer from './components/CurrencyContainer/CurrencyContainer';
 
 function App() {
   return (
     <div className="App">
-      <CurrencyDisplay/>
+      <CurrencyContainer/>
     </div>
   );
 }
